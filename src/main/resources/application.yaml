@@ -16,7 +16,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: milos.jacimovic@student.etf.unibl.org
-    password: milos777
+    password:
 
 
     properties:
