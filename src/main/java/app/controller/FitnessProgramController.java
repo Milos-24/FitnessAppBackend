@@ -35,9 +35,9 @@ public class FitnessProgramController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteFitnessProgram(@PathVariable("id") int id)
+    public ResponseEntity<?> deleteFitnessProgram(@RequestParam int userId, @PathVariable("id") int id)
     {
-        return fitnessProgramService.deleteFitnessProgram(id);
+        return fitnessProgramService.deleteFitnessProgram(id, userId);
     }
 
 
@@ -55,6 +55,13 @@ public class FitnessProgramController {
     @GetMapping("/category/{category}")
     public ResponseEntity<List<FitnessProgram>> getFitnessProgramsByCategory(@PathVariable("category") String category) {
         List<FitnessProgram> programs = fitnessProgramService.getAllFitnessProgramsByCategory(category);
+
+        return new ResponseEntity<>(programs, HttpStatus.OK);
+    }
+
+    @GetMapping("/my-programs/{username}")
+    public ResponseEntity<List<FitnessProgram>> getMyFitnessProgram(@PathVariable("username") String username) {
+        List<FitnessProgram> programs = fitnessProgramService.getAllFitnessProgramsByUsername(username);
 
         return new ResponseEntity<>(programs, HttpStatus.OK);
     }

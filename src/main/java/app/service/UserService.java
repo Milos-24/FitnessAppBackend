@@ -1,7 +1,9 @@
 package app.service;
 
+import app.entities.Log;
 import app.entities.User;
 import app.entities.UserType;
+import app.repositories.LogRepository;
 import app.repositories.UserRepository;
 import app.repositories.UserTypeRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -18,6 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final LogRepository logRepository;
     private final UserTypeRepository userTypeRepository;
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -71,6 +76,14 @@ public class UserService {
                 .enabled(false)
                 .city(request.getCity())
                 .build();
+
+
+        Log log = Log.builder()
+                .event("New User added: "+ user.getUsername())
+                .date(new Date())
+                .build();
+
+        logRepository.save(log);
 
 
         userRepository.save(user);
@@ -204,5 +217,13 @@ public class UserService {
 
         user.setEnabled(true);
         return userRepository.save(user);
+    }
+
+    public List<String> getAllUsernames(String username) {
+        return userRepository.findAll().stream().filter(
+                user -> !user.getUserType().getType().equals("admin") & !user.getUsername().equals(username)
+        ).map(
+                User::getUsername
+        ).collect(Collectors.toList());
     }
 }

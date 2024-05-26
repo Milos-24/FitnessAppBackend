@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.dtos.CommentDTO;
 import app.entities.Comment;
 import app.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,7 @@ public class CommentController {
 
     @PostMapping("/create")
     public Comment createComment(
-            @RequestBody Comment comment,
-            @RequestParam int fitnessProgramId,
-            @RequestParam String user) {
-        return commentService.createComment(comment, fitnessProgramId, user);
+            @RequestBody CommentDTO comment) {
+        return commentService.createComment(comment, comment.getFitnessProgramId(), comment.getUser());
     }
 }

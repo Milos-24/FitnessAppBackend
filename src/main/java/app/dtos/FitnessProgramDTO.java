@@ -15,14 +15,4 @@ public class FitnessProgramDTO {
     public FitnessProgramDTO() {
     }
 
-    public FitnessProgramDTO(String name, String price, String duration, String description, int level, String location, String selectedCategory) {
-        this.name = name;
-        this.price = price;
-        this.duration = duration;
-        this.description = description;
-        this.level = level;
-        this.location = location;
-        this.selectedCategory = selectedCategory;
-    }
-
 }

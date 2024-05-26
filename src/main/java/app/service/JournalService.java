@@ -20,53 +20,6 @@ import java.util.stream.Collectors;
 public class JournalService {
 
     private final JournalRepository journalRepository;
-    public ByteArrayOutputStream savePdf(int user_id) throws Exception {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        Document document = new Document();
-        PdfWriter writer;
-
-        try {
-            writer = PdfWriter.getInstance(document, outputStream);
-            document.open();
-
-            Font titleFont = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
-            Paragraph title = new Paragraph("Fitness Progress Diary", titleFont);
-            title.setAlignment(Element.ALIGN_CENTER);
-            document.add(title);
-
-            Date currentDate = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Paragraph dateTime = new Paragraph("Generated on: " + dateFormat.format(currentDate));
-            dateTime.setAlignment(Element.ALIGN_CENTER);
-            document.add(dateTime);
-            document.add(new Paragraph("\n"));
-
-            List<Journal> journals = journalRepository.findByUserId(user_id);
-
-            journals.forEach(
-                    journal -> {
-                        try {
-                            document.add(new Paragraph("Progress: " + journal.getProgressInfo()));
-                            document.add(new Paragraph("Exercise info: "+journal.getExerciseInfo()));
-                            document.add(new Paragraph("Date:"+ journal.getDate()));
-                            document.add(new Paragraph("====================================="));
-                        } catch (DocumentException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                    }
-            );
-
-
-            document.close();
-            writer.close();
-
-        } catch (DocumentException e) {
-            throw new RuntimeException(e);
-        }
-
-        return outputStream;
-    }
 
     public List<JournalDTO> getJournal(int user_id)
     {

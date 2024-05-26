@@ -17,7 +17,7 @@ public class ProgramExerciseService {
     private final ProgramExerciseRepository programExerciseRepository;
     private final FitnessProgramRepository fitnessProgramRepository;
     private final ExerciseRepository exerciseRepository;
-    public ResponseEntity<?> addProgramExercise(int fitnessProgramId, int exerciseId, String repetition, String duration) {
+    public ResponseEntity<?> addProgramExercise(int fitnessProgramId, int exerciseId, String repetition, String duration, String link) {
         FitnessProgram fitnessProgram = fitnessProgramRepository.findById(fitnessProgramId).orElse(null);
         Exercise exercise = exerciseRepository.findById(exerciseId).orElse(null);
 
@@ -26,6 +26,7 @@ public class ProgramExerciseService {
                 .exercise(exercise)
                 .repetition(repetition)
                 .duration(duration)
+                .link(link)
                 .build();
 
         programExerciseRepository.save(programExercise);

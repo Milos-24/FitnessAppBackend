@@ -32,6 +32,9 @@ public class ProgramExercise {
     @Column
     private String duration;
 
+    @Column
+    private String link;
+
     public ProgramExercise() {
     }
 

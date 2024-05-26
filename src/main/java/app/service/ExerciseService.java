@@ -19,7 +19,7 @@ public class ExerciseService {
     private final ProgramExerciseRepository programExerciseRepository;
     public List<ExerciseDTO> getExercises(int id) {
         return programExerciseRepository.findAllByFitnessProgramId(id).stream().map(
-                programExercise -> new ExerciseDTO(programExercise.getDuration(),programExercise.getExercise().getName(), programExercise.getRepetition())
+                programExercise -> new ExerciseDTO(programExercise.getDuration(),programExercise.getExercise().getName(), programExercise.getRepetition(), programExercise.getLink())
         ).collect(Collectors.toList());
     }
 

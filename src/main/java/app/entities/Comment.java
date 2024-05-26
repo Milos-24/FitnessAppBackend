@@ -25,21 +25,15 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column
     private String comment;
 
 
 
     @Column(name = "date")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
     public Comment() {
     }
 
-    public Comment(FitnessProgram fitnessProgram, User user, String comment, Date date) {
-        this.fitnessProgram = fitnessProgram;
-        this.user = user;
-        this.comment = comment;
-        this.date = date;
-    }
 }

@@ -28,6 +28,13 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @GetMapping("/usernames/{username}")
+    public ResponseEntity<List<String>> getUsernames(@PathVariable("username") String username)
+    {
+        List<String> usernames = userService.getAllUsernames(username);
+        return new ResponseEntity<>(usernames, HttpStatus.OK);
+    }
+
     @GetMapping("/username/{username}")
     public User getUser(@PathVariable("username") String username) {
         return userService.getUserByUsername(username);

@@ -22,6 +22,7 @@ public class FitnessProgramService {
     private final FitnessProgramRepository fitnessProgramRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final LogRepository logRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final CommentRepository commentRepository;
     private final MembershipRepository membershipRepository;
@@ -39,6 +40,12 @@ public class FitnessProgramService {
         return fitnessProgramRepository.findByCategory(categoryRepository.findByName(category));
     }
 
+    public List<FitnessProgram> getAllFitnessProgramsByUsername(String username)
+    {
+        return fitnessProgramRepository.findAll().stream().filter(
+                fitnessProgram -> fitnessProgram.getCreator().getUsername().equals(username)
+        ).collect(Collectors.toList());
+    }
 
     public ResponseEntity<?> addFitnessProgram(FitnessProgramDTO fitnessProgramDTO, String username)
     {
@@ -61,6 +68,13 @@ public class FitnessProgramService {
                 .memberships(memberships)
                 .programExercises(programExercises)
                 .build();
+
+        Log log = Log.builder()
+                .event("New Fitness Program added: "+ fitnessProgram.getName())
+                .date(new Date())
+                .build();
+
+        logRepository.save(log);
 
         fitnessProgramRepository.save(fitnessProgram);
 
@@ -112,20 +126,34 @@ public class FitnessProgramService {
         return fitnessProgramRepository.findAll(specification);
     }
 
-    public ResponseEntity<?> deleteFitnessProgram(int id) {
+    public ResponseEntity<?> deleteFitnessProgram(int id, int userId) {
 
         FitnessProgram fitnessProgram = fitnessProgramRepository.findById(id).orElse(null);
-        if(fitnessProgram!=null)
-        {
+
+
+        if(fitnessProgram.getCreator().equals(userRepository.findById(userId).get())) {
+
             commentRepository.deleteAll(fitnessProgram.getComments());
             membershipRepository.deleteAll(fitnessProgram.getMemberships());
             programExerciseRepository.deleteAll(fitnessProgram.getProgramExercises());
+
+            fitnessProgramRepository.deleteById(id);
+
+
+            Log log = Log.builder()
+                    .event("Fitness Program deleted: id= "+ id)
+                    .date(new Date())
+                    .build();
+
+            logRepository.save(log);
+
+
+            return ResponseEntity.ok().build();
         }
+        else
+        {
 
-
-    fitnessProgramRepository.deleteById(id);
-
-
-        return ResponseEntity.ok().build();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

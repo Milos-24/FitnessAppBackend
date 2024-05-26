@@ -1,14 +1,8 @@
 package app.service;
 
 import app.dtos.MembershipDTO;
-import app.entities.FitnessProgram;
-import app.entities.Membership;
-import app.entities.Payment;
-import app.entities.User;
-import app.repositories.FitnessProgramRepository;
-import app.repositories.MembershipRepository;
-import app.repositories.PaymentRepository;
-import app.repositories.UserRepository;
+import app.entities.*;
+import app.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +16,7 @@ import java.util.stream.Collectors;
 public class MembershipService {
 
     private final MembershipRepository membershipRepository;
+    private final LogRepository logRepository;
     private final PaymentRepository paymentRepository;
     private final UserRepository userRepository;
     private final FitnessProgramRepository fitnessProgramRepository;
@@ -33,6 +28,12 @@ public class MembershipService {
 
         Membership membership = new Membership(user,fitnessProgram,card,payment, new Date());
 
+        Log log = Log.builder()
+                .event("New Membership added for program: " + membership.getFitnessProgram().getName())
+                .date(new Date())
+                .build();
+
+        logRepository.save(log);
 
         membershipRepository.save(membership);
 

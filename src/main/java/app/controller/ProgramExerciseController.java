@@ -16,8 +16,9 @@ public class ProgramExerciseController {
     public ResponseEntity<?> addProgramExercise(@PathVariable("id") int id,
                                                 @RequestParam String duration,
                                                 @RequestParam String repetition,
+                                                @RequestParam String link,
                                                 @RequestParam int fitnessProgramId)
     {
-        return programExerciseService.addProgramExercise(fitnessProgramId,id,repetition,duration);
+        return programExerciseService.addProgramExercise(fitnessProgramId,id,repetition,duration, link);
     }
 }

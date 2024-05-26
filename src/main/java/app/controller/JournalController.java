@@ -21,18 +21,6 @@ public class JournalController {
 
     private final JournalService journalService;
     private final UserRepository userRepository;
-    @GetMapping("/pdf/{id}")
-    public ResponseEntity<byte[]> savePdf(@PathVariable("id") int id) throws Exception {
-        ByteArrayOutputStream outputStream = journalService.savePdf(id);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("filename",  "journal.pdf");
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(outputStream.toByteArray());
-    }
 
     @PostMapping
     public ResponseEntity<?> addJournalEntry(@RequestBody JournalDTO journal,@RequestParam int userId)
